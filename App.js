@@ -1,59 +1,52 @@
 import Loading from "./components/Loading";
 import * as Location from 'expo-location';
 import React from "react";
-import {Alert} from "react-native";
+import axios from "axios";
+import Weather from "./components/Weather";
 
 export default function App() {
 
-  // const [location, setLocation] = React.useState(null);
-  // const [errorMsg, setErrorMsg] = React.useState(null);
-  // const getLocations = async ()=> {
-  //   try {
-  //     const response = await Location.requestForegroundPermissionsAsync()
-  //     console.log(response)
-  //     const location = await Location.getCurrentPositionAsync()
-  //     console.log(location)
-  //   }catch (err){
-  //     Alert.alert('не могу определить местоположение', "сори")
-  //   }
-  // }
-  // React.useEffect(() =>{
-  //   getLocations()
-  // })/
-  // return (
-  //    <Loading />
-  // );
+    const [location, setLocation] = React.useState(null);
+    const [errorMsg, setErrorMsg] = React.useState(null);
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [temp, setTemp] = React.useState();
+    const [condition, setCondition] = React.useState();
 
-  const [location, setLocation] = React.useState(null);
-  const [errorMsg, setErrorMsg] = React.useState(null);
-  const [isLoading, setIsLoading] = React.useState(false);
+    const API_KEY = '9368b1c65dbff106a4c6c46794e2822b'
 
-  React.useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was deniedss');
+    const getWeather = async (latitude, longitude) => {
+        const {data: {main:{temp}, weather}} = await axios
+            .get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`)
         setIsLoading(false)
-        return;
-      };
+        setTemp(temp)
+        setCondition(weather[0].main)
+        console.log(temp)
+    }
 
-      let location = await Location.getCurrentPositionAsync({});
-      setIsLoading(true)
-      setLocation(location.coords);
-    })();
-    console.log(location)
-  }, []);
+    React.useEffect(() => {
+        (async () => {
+            let {status} = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                setErrorMsg('Permission to access location was denied');
+                setIsLoading(false)
+                return;
+            }
+            let location = await Location.getCurrentPositionAsync({});
+            getWeather(location.coords.latitude, location.coords.longitude)
+            setLocation(location.coords);
+        })();
+    }, []);
 
-  // let text = 'Waiting..';
-  // if (errorMsg) {
-  //   text = errorMsg;
-  // } else if (location) {
-  //   text = JSON.stringify(location);
-  // }
+    // let text = 'Waiting..';
+    // if (errorMsg) {
+    //   text = errorMsg;
+    // } else if (location) {
+    //   text = JSON.stringify(location);
+    // }
 
-  return (
-      isLoading ? <Loading /> : null
-  );
+    return (
+        isLoading ? <Loading/> : <Weather temp={Math.round(temp)} condition={condition}></Weather>
+    )
 }
 
 
