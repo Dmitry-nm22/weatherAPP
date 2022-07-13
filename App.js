@@ -32,7 +32,7 @@ export default function App() {
                 return;
             }
             let location = await Location.getCurrentPositionAsync({});
-            getWeather(location.coords.latitude, location.coords.longitude)
+            await getWeather(location.coords.latitude, location.coords.longitude)
             setLocation(location.coords);
         })();
     }, []);

@@ -6,22 +6,76 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const Weather = ({temp, condition}) => {
     const WeatherOptions = {
-        Thunderstorm:{ iconName:'thunderstorm-outline'},
-        Drizzle:{iconName:'rainy'},
-        Rain:{iconName:'rainy'},
-        Snow:{iconName:'snow'},
-        Mist:{iconName:'cloudy'},
-        Smoke:{iconName:'cloudy'},
-        Haze:{iconName:'cloudy'},
-        Dust:{iconName:'sunny'},
-        Fog:{iconName:'cloudy'},
-        Sand:{iconName:'sunny'},
-        Clear:{iconName:'sunny-sharp'},
-        Clouds:{iconName:'cloud'},
+        Thunderstorm:{
+            iconName:'thunderstorm-outline',
+            color:['#4B79A1','#283E51'],
+            title:'Сиди дома!',
+            subTitle:'Тебя снесет!',
+        },
+        Drizzle:{
+            iconName:'rainy',
+            color:['#4B79A1','#283E51'],
+            title:'Возьми зонт.',
+            subTitle:'Возможно дождь усилится.',
+        },
+        Rain:{
+            iconName:'rainy',
+            color:['#2193b0','#6dd5ed'],
+            title:'На улице дождь.',
+            subTitle:'Возможно он скоро кончится...',
+        },
+        Snow:{
+            iconName:'snow',
+            color:['#E0EAFC','#CFDEF3'],
+            title:'На улице снег.',
+            subTitle:'Лепите снеговиков!',
+        },
+        Smoke:{
+            iconName:'cloudy',
+            color:['#F2F2F2','#DBDBDB','#EAEAEA'],
+            title:'На улице смог.',
+            subTitle:'Возможно плохая видимость!',
+        },
+        Haze:{
+            iconName:'cloudy',
+            color:['#fceabb','#f8b500'],
+            title:'На улице снег.',
+            subTitle:'Лепите снеговиков!',
+        },
+        Dust:{
+            iconName:'sunny',
+            color:['#fceabb','#f8b500'],
+            title:'Пыльно!',
+            subTitle:'Лучше закройте окна.',
+        },
+        Fog:{
+            iconName:'cloudy',
+            color:['#F2F2F2','#DBDBDB','#EAEAEA'],
+            title:'На улице туман!',
+            subTitle:'Видимость снижена.',
+        },
+        Sand:{
+            iconName:'sunny',
+            color:['#fceabb','#f8b500'],
+            title:'Пыльно!',
+            subTitle:'Лучше закройте окна.',
+        },
+        Clear:{
+            iconName:'sunny-sharp',
+            color:['#2980B9','#6DD5FA','#FFFFFF'],
+            title:'На улице солнечно!',
+            subTitle:'Не забудь очки.',
+        },
+        Clouds:{
+            iconName:'cloud',
+            color:['#D3CCE3','#E9E4F0','#E9E4F0'],
+            title:'Облачно!',
+            subTitle:'Возможно пойдет дождь.',
+        },
     }
     return (
         <LinearGradient
-            colors={['#4c669f', '#3b5998', '#192f6a']}
+            colors={WeatherOptions[condition].color}
             style={styles.container}
         >
             <StatusBar barStyle='light-content'/>
@@ -29,8 +83,9 @@ const Weather = ({temp, condition}) => {
                 <Ionicons name={WeatherOptions[condition].iconName} size={96} color='white'/>
                 <Text style={styles.temp}>{temp}°</Text>
             </View>
-            <View style={styles.halfContainer}>
-
+            <View style={{...styles.halfContainer, ...styles.textContainer}}>
+                <Text style={styles.title}>{WeatherOptions[condition].title}</Text>
+                <Text style={styles.subTitle}>{WeatherOptions[condition].subTitle}</Text>
             </View>
         </LinearGradient>
     )
@@ -46,8 +101,6 @@ Weather.propTypes = {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
     },
     halfContainer: {
         flex: 1,
@@ -57,5 +110,25 @@ const styles = StyleSheet.create({
     temp:{
         fontSize: 42,
         color: 'white'
+    },
+    title:{
+        color:"white",
+        fontSize: 44,
+        fontWeight: '300',
+        marginBottom: 10,
+        textAlign:'left'
+    },
+    subTitle:{
+        color:"white",
+        fontWeight: '600',
+        fontSize: 24,
+        textAlign:'left'
+
+    },
+    textContainer:{
+        flex: 1,
+        paddingHorizontal: 40,
+        alignItems: 'flex-start',
+        justifyContent: 'center'
     }
 });
