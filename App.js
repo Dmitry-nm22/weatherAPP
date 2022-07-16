@@ -25,26 +25,27 @@ export default function App() {
     React.useEffect(() => {
         (async () => {
             let {status} = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                setErrorMsg('Permission to access location was denied');
+            if (status === 'granted') {
+                let location = await Location.getCurrentPositionAsync({});
+                await getWeather(location.coords.latitude, location.coords.longitude)
+                setLocation(location.coords);
                 setIsLoading(false)
+            }else{
+                setErrorMsg('Permission to access location was denied');
                 return;
             }
-            let location = await Location.getCurrentPositionAsync({});
-            await getWeather(location.coords.latitude, location.coords.longitude)
-            setLocation(location.coords);
         })();
     }, []);
 
-    // let text = 'Waiting..';
-    // if (errorMsg) {
-    //   text = errorMsg;
-    // } else if (location) {
-    //   text = JSON.stringify(location);
-    // }
+    let text = 'получение погоды...';
+    if (errorMsg) {
+      text = errorMsg;
+    } else if (location) {
+      text = JSON.stringify(location);
+    }
 
     return (
-        isLoading ? <Loading/> : <Weather temp={Math.round(temp)} condition={condition}></Weather>
+        isLoading ? <Loading text={text}/> : <Weather temp={Math.round(temp)} condition={condition}></Weather>
     )
 }
 

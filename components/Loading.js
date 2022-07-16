@@ -1,12 +1,12 @@
 import React from 'react' ;
 import {StatusBar, StyleSheet, Text, View} from 'react-native';
 
-const Loading =()=>{
+const Loading =({text})=>{
     return(
         <View style={styles.container}>
             <StatusBar barStyle='dark-content'/>
             <Text style={styles.text}>
-                Получение погоды...
+                {text}
             </Text>
         </View>
     )
