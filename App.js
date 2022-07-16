@@ -17,10 +17,9 @@ export default function App() {
     const getWeather = async (latitude, longitude) => {
         const {data: {main:{temp}, weather}} = await axios
             .get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`)
-        setIsLoading(false)
         setTemp(temp)
         setCondition(weather[0].main)
-        console.log(temp)
+        setIsLoading(false)
     }
 
     React.useEffect(() => {
